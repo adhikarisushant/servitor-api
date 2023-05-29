@@ -3,10 +3,10 @@ import { createVendorInput } from '../dto';
 import { Vendor } from '../models';
 import { GeneratePassword, GenerateSalt } from '../utility';
 
-export const FindVendor = async(id: string | undefined, email?: string) => {
-    if(email) {
+export const FindVendor = async (id: string | undefined, email?: string) => {
+    if (email) {
         return await Vendor.findOne({ email: email });
-    } else  {
+    } else {
         return await Vendor.findById(id);
     }
 }
@@ -17,7 +17,7 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
 
     const existingVendor = await FindVendor('', email);
 
-    if(existingVendor !== null) {
+    if (existingVendor !== null) {
         return res.json({ 'message': 'user with this email already exists' });
     }
 
@@ -29,12 +29,14 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
 
     const userPassword = await GeneratePassword(password, salt);
 
+    console.log("userPassword =>", typeof userPassword, userPassword);
+
     const createdVendor = await Vendor.create({
         name: name,
         address: address,
         pincode: pincode,
         foodType: foodType,
-        email: email,   
+        email: email,
         password: userPassword,
         salt: salt,
         ownerName: ownerName,
@@ -50,10 +52,10 @@ export const CreateVendor = async (req: Request, res: Response, next: NextFuncti
 export const GetVendors = async (req: Request, res: Response, next: NextFunction) => {
     const vendors = await Vendor.find();
 
-    if(vendors !== null) {
+    if (vendors !== null) {
         return res.json(vendors);
     }
-    
+
     res.json({ message: 'vendors is empty' });
 }
 
@@ -63,7 +65,7 @@ export const GetVendorById = async (req: Request, res: Response, next: NextFunct
 
     const vendor = await FindVendor(vendorId)
 
-    if(vendor !== null) {
+    if (vendor !== null) {
         return res.json(vendor);
     }
 

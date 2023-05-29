@@ -5,24 +5,28 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config();
 
-import { MONGO_URI } from "./config";
+import config from './config';
 
+// import { MONGO_URI } from "./config";
+console.log('MONGO_URL =>', typeof process.env.MONGO_URL, process.env.MONGO_URL);
 
 const app = express();
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use('/admin', AdminRoute);
 app.use('/vendor', VendorRoute);
 
-mongoose.connect(MONGO_URI)
+// const mongo: string = MONGO_URI!;    
+
+mongoose.connect(config.MONGO_URI)
     .then(() => {
         console.log("DB Connected");
     })
     .catch(err => console.log('error' + err))
 
-const PORT = process.env.NODE_ENV || 8000;
+const PORT = config.PORT || 8000;
 
 app.listen(PORT, () => {
     console.log("server is running at port 8000");
