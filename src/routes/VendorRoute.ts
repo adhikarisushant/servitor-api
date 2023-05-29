@@ -1,8 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { GetVendorProfile, UpdateVendorProfile, UpdateVendorService, VendorLogin } from '../controllers';
+import { Authenticate } from '../middlewares';
 
 const router = express.Router();
 
+router.use(Authenticate);
 router.post('/login', VendorLogin);
 router.get('/profile', GetVendorProfile);
 router.patch('/profile', UpdateVendorProfile);
