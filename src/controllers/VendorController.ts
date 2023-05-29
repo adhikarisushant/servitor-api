@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { VendorLoginInput } from '../dto';
-import { ValidatePassword } from '../utility';
+import { GenerateSignature, ValidatePassword } from '../utility';
 import { Vendor } from '../models';
 
 
@@ -14,7 +14,15 @@ export const VendorLogin = async (req: Request, res: Response, next: NextFunctio
         const validation = await ValidatePassword(password, existingVendor.password, existingVendor.salt);
 
         if (validation) {
-            return res.json(existingVendor);
+
+            const signature = GenerateSignature({
+                _id: existingVendor.id,
+                email: existingVendor.email,
+                foodType: existingVendor.foodType,
+                name: existingVendor.name
+            })
+
+            return res.json(signature);
         } else {
             return res.json({ "message": "email or password not valid." });
         }

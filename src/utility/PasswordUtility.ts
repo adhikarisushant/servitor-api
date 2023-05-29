@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { APP_SECRET } from '../config';
 import { VendorPayload } from '../dto';
-import config from '../config';
 
 // type Config = string | undefined;
 
@@ -19,6 +19,5 @@ export const ValidatePassword = async (enteredPassword: string, savedPassword: s
 }
 
 export const GenerateSignature = (payload: VendorPayload) => {
-
-    const signature = jwt.sign(payload, config.SECRET);
+    return jwt.sign(payload, APP_SECRET, { expiresIn: '1d' });
 }
