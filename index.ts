@@ -4,18 +4,21 @@ dotenv.config();
 import { AdminRoute, VendorRoute } from './routes';
 import bodyParser from 'body-parser';
 import mongoose from "mongoose";
+import path from 'path';
 
 import { DEV_PORT, MONGO } from "./config";
-
 // import config from './config';
+
 
 // import { MONGO_URI } from "./config";
 // console.log('MONGO_URL =>', typeof process.env.MONGO_URL, process.env.MONGO_URL);
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/images', express.static(path.join(__dirname, './images')));
 
 app.use('/admin', AdminRoute);
 app.use('/vendor', VendorRoute);
